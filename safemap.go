@@ -7,6 +7,9 @@
 
 package safemap
 
+import "iter"
+
+// SafeMap defines a concurrency-safe map interface with common operations
 type SafeMap[K comparable, V any] interface {
 	Length() int
 	Get(K) (V, bool)
@@ -14,10 +17,13 @@ type SafeMap[K comparable, V any] interface {
 	ChangeKey(K, K) bool
 	Delete(K)
 	Exists(K) bool
-	Keys() []K
-	Values() []V
-	KeysIter() <-chan K
-	ValuesIter() <-chan V
+	KeysSlice() []K
+	ValuesSlice() []V
+	KeysChan() <-chan K
+	ValuesChan() <-chan V
 	ForEach(func(K, V) error) error
+	All() iter.Seq2[K, V]
+	Keys() iter.Seq[K]
+	Values() iter.Seq[V]
 	Clear()
 }
